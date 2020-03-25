@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE configuration>
+<configuration>
+	<appender name="APP"
+		class="ch.qos.logback.core.rolling.RollingFileAppender">
+		<file>/log/fwjg/app_log.txt</file>
+		<rollingPolicy
+			class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
+			<!-- rollover daily -->
+			<fileNamePattern>/log/fwjg/app_log-%d{yyyy-MM-dd}.%i.txt.zip</fileNamePattern>
+			<!-- each file should be at most 20MB, keep 180 days worth of history, 
+				but at most 100GB -->
+			<maxFileSize>20MB</maxFileSize>
+			<maxHistory>180</maxHistory>
+			<totalSizeCap>100GB</totalSizeCap>
+		</rollingPolicy>
+		<encoder>
+			<pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} %-6level [%thread] %logger Line:%-3L - %msg%n</pattern>
+		</encoder>
+	</appender>
+
+	<appender name="SQL"
+		class="ch.qos.logback.core.rolling.RollingFileAppender">
+		<file>/log/fwjg/durid_log.txt</file>
+		<rollingPolicy
+			class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
+			<!-- rollover daily -->
+			<fileNamePattern>/log/fwjg/durid_log-%d{yyyy-MM-dd}.%i.txt.zip</fileNamePattern>
+			<!-- each file should be at most 20MB, keep 180 days worth of history, 
+				but at most 100GB -->
+			<maxFileSize>20MB</maxFileSize>
+			<maxHistory>180</maxHistory>
+			<totalSizeCap>100GB</totalSizeCap>
+		</rollingPolicy>
+		<encoder>
+			<pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} %-6level [%thread] %logger Line:%-3L - %msg%n</pattern>
+		</encoder>
+	</appender>
+	
+	
+	<appender name="STDOUT"
+		class="ch.qos.logback.core.ConsoleAppender">
+		<encoder>
+			<pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} %-6level [%thread] %logger Line:%-3L - %msg%n</pattern>
+		</encoder>
+	</appender>
+
+
+
+	<logger name="com" level="DEBUG">
+		<appender-ref ref="APP" />
+	</logger>
+
+	<logger name="druid.sql" level="DEBUG">
+		<appender-ref ref="SQL" />
+	</logger>
+	
+	<logger name="com" level="TRACE">
+		<appender-ref ref="STDOUT" />
+	</logger>
+
+</configuration>
