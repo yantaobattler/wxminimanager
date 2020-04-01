@@ -47,7 +47,7 @@
 
 
 
-	<logger name="com" level="DEBUG">
+	<logger name="ROOT" level="INFO">
 		<appender-ref ref="APP" />
 	</logger>
 
@@ -55,7 +55,11 @@
 		<appender-ref ref="SQL" />
 	</logger>
 	
-	<logger name="com" level="TRACE">
+	<logger name="ROOT" level="INFO">
+		<appender-ref ref="STDOUT" />
+	</logger>
+	
+	<logger name="com.wx" level="DEBUG" additivity = "false">
 		<appender-ref ref="STDOUT" />
 	</logger>
 
