@@ -2,6 +2,8 @@ package com.wx.wxminimanager.user.service.impl;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpSession;
@@ -10,6 +12,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
+import com.wx.wxminimanager.tools.ControllerTools;
 import com.wx.wxminimanager.user.dao.UserMapper;
 import com.wx.wxminimanager.user.model.UserModel;
 import com.wx.wxminimanager.user.service.UserService;
@@ -24,7 +27,8 @@ import com.wx.wxminimanager.user.service.UserService;
 @Service("userService")
 public class UserServiceImpl implements UserService {
 	
-	private  final Logger logger = LoggerFactory.getLogger(this.getClass());
+	private final Logger logger = LoggerFactory.getLogger(this.getClass());
+	private ControllerTools tools = new ControllerTools();
 
 	@Resource
 	private UserMapper dao;
@@ -41,10 +45,10 @@ public class UserServiceImpl implements UserService {
 		logger.debug("user:{}/{}...", user.getUsername(), user.getPassword());
 		logger.debug("user_in_db:{}/{}...", user_in_db.getUsername(), user_in_db.getPassword());
 		
-		if (!user.getPassword().equals(user_in_db.getPassword())) {
+		if (!tools.encodePwd(user.getPassword()).equals(user_in_db.getPassword())) {
 			return 2;
 		} 
-		if (user.getPassword().equals(user_in_db.getPassword())) {
+		if (tools.encodePwd(user.getPassword()).equals(user_in_db.getPassword())) {
 			
 			loginUser(session, user_in_db);
 			return 0;
@@ -55,9 +59,32 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
-	public boolean changePassword(UserModel user, String new_password) {
-		// TODO Auto-generated method stub
-		return false;
+	public Map<String, String> changePassword(UserModel user, String old_password, String new_password) {
+		
+		Map<String, String> rsp_map = new HashMap<String, String>();
+		
+		if (!tools.encodePwd(old_password).equals(user.getPassword())) {
+			
+			rsp_map.put("rsp_code", "000002");
+			rsp_map.put("rsp_msg", "密码不正确!");
+			logger.info("userid: {}, password update failed, older is wrong...", user.getUserid());
+			return rsp_map;
+			
+		} else {
+			
+			UserModel newuser = new UserModel();
+			newuser.setUserid(user.getUserid());
+			newuser.setPassword(tools.encodePwd(new_password));
+			
+			int i = dao.updateUser(newuser);
+			logger.info("userid: {}, password updated {} row", user.getUserid(), i);
+			
+			rsp_map.put("rsp_code", "000000");
+			rsp_map.put("rsp_msg", "密码更新成功!");
+			return rsp_map;
+			
+		}
+
 	}
 
 	@Override

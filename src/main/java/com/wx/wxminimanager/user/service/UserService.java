@@ -1,5 +1,7 @@
 package com.wx.wxminimanager.user.service;
 
+import java.util.Map;
+
 import javax.servlet.http.HttpSession;
 
 import com.wx.wxminimanager.user.model.UserModel;
@@ -19,7 +21,7 @@ public interface UserService {
 	
 	public int checkUser(UserModel user, HttpSession session);
     
-    public boolean changePassword(UserModel user, String new_password);
+    public Map<String, String> changePassword(UserModel user, String old_password, String new_password);
 	
     public void loginUser(HttpSession session, UserModel user);
 	

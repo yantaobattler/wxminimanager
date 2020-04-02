@@ -44,6 +44,22 @@
 		</set>
 		where username = #{username,jdbcType=VARCHAR}
 	</update>
+	
+	<update id="updateUser" parameterType="com.wx.wxminimanager.user.model.UserModel">
+		update user
+		<set>
+			<if test="username != null">
+				username = #{username,jdbcType=VARCHAR},
+			</if>
+			<if test="chinesename != null">
+				chinesename = #{chinesename,jdbcType=VARCHAR},
+			</if>
+			<if test="password != null">
+				password = #{password,jdbcType=VARCHAR},
+			</if>
+		</set>
+		where userid = #{userid,jdbcType=VARCHAR}
+	</update>
 
 <!--  
 	<select id="selectCountofTime" parameterType="string" resultType="int">

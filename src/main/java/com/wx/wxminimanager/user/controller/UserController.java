@@ -4,6 +4,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
@@ -42,11 +43,23 @@ public class UserController {
 	
 	@Resource
 	private UserService userservice;
+	private boolean islogin;
 	String rsp_code, rsp_msg, next = "";
 
 	
+	@ModelAttribute
+    public void hasSession(HttpServletRequest request){
+		if (null == request.getSession().getAttribute("user")) {
+			islogin = false;
+//			request.getRequestDispatcher(request.getContextPath() + forward).forward(request, response);
+		} else {
+			islogin = true;
+		}
+	}
+	
+	
 	@ResponseBody
-	@RequestMapping("/login")
+	@RequestMapping(value = "/login", method = RequestMethod.POST)
 	public String login(HttpServletRequest request) {
 		
 		logger.info("======request /user/login=======");
@@ -101,14 +114,21 @@ public class UserController {
 	@RequestMapping(value="/logout")
 	public ModelAndView logout(HttpServletRequest request) {
 		
+		ModelAndView modelandview = new ModelAndView();
+		
+		if (!islogin) {
+			modelandview.setViewName("index");
+			logger.info("request /user/logout, but no session, return modelandview: /index");
+			return modelandview;
+		}
+		
 		UserModel user = (UserModel) request.getSession().getAttribute("user");
     	logger.info("userid: {}, request /user/logout", user.getUserid());
     	
 		userservice.logoutUser(request.getSession());
 		
 		logger.info("return modelandview: /index");
-		
-		ModelAndView modelandview = new ModelAndView();
+				
 		modelandview.setViewName("/index");
 		
 		return modelandview;
@@ -116,7 +136,57 @@ public class UserController {
 	}
 	
 
+	@RequestMapping("/chgpwd_page")
+    public ModelAndView chgpwd_page(HttpServletRequest request) {
+    	
+        ModelAndView modelandview = new ModelAndView();
+		
+		if (!islogin) {
+			modelandview.setViewName("index");
+			logger.info("request /user/chgpwd_page, but no session, return modelandview: /index");
+			return modelandview;
+		}
+		
+		UserModel user = (UserModel) request.getSession().getAttribute("user");
+    	logger.info("userid: {}, request /user/chgpwd_page", user.getUserid());
+		
+		logger.info("userid: {}, return modelandview: /user/chgpwd_page", user.getUserid());
+				
+		modelandview.setViewName("/user/chgpwd_page");
+		
+		return modelandview;
+    }
+	
+	
 	@ResponseBody
+	@RequestMapping(value = "/chgpwd", method = RequestMethod.POST)
+    public String chgpwd(HttpServletRequest request) {
+		
+		UserModel user = (UserModel) request.getSession().getAttribute("user");
+		
+		logger.info("userid: {}, request /user/chgpwd", user.getUserid());
+			
+		String old_pass = request.getParameter("old_pass");
+		String pass = request.getParameter("pass");
+		
+		Map<String, String> rsp_map = userservice.changePassword(user, old_pass, pass);
+		
+		Gson gson = new Gson();
+		String rsp_string = gson.toJson(rsp_map);
+		
+		logger.info("userid: {}, password update success", user.getUserid());
+		logger.info("userid: {}, response /user/chgpwd↓↓↓", user.getUserid());
+		logger.info("return JSON {}", rsp_string);
+		logger.info("userid: {}, response /user/chgpwd↑↑↑", user.getUserid());
+		
+		request.getSession().removeAttribute("user");
+		logger.info("=======remove Session======");
+		
+		return rsp_string;
+
+    }
+    
+    @ResponseBody
 	@RequestMapping("/111111login")
     public ModelAndView index() {
     	

@@ -40,9 +40,6 @@
               //   });
               //监听提交
               form.on('submit(login)', function(data){
-                layer.msg(JSON.stringify(data.field));
-                console.log(data.field);
-                console.log(data);
                 $.ajax({
                     type : "POST",
                     url : "/user/login",
@@ -50,14 +47,14 @@
    
                     success:function (data) {
                     	var rsp = JSON.parse(data);
-                    	console.log(rsp);
-                    	console.log(rsp.rsp_code);
-                    	console.log(rsp.rsp_msg);
-                    	console.log(rsp.next);
                     	
                     	if ("000000" == rsp.rsp_code){
                     		
-                    		 window.location.href = rsp.next;
+                    		//layer.msg(rsp.rsp_msg, function(){
+                                //关闭后的操作
+                    		//	window.location.href = rsp.next;
+                            //});
+                    		window.location.href = rsp.next;
                     		 
                     	} else {
                     		

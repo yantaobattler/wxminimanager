@@ -9,6 +9,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.wx.wxminimanager.tools.ControllerTools;
 import com.wx.wxminimanager.user.model.UserModel;
 
 import java.io.IOException;
@@ -27,34 +28,34 @@ import org.slf4j.LoggerFactory;
 @RequestMapping("")
 public class MainController {
 	
-	private  final Logger logger = LoggerFactory.getLogger(this.getClass());
+	private final Logger logger = LoggerFactory.getLogger(this.getClass());
+	private boolean islogin;
+	
 	
 	@ModelAttribute
-    public void common(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
-        
-		//下面所有方法执行前都会先执行这个
-		
-		logger.info("================================");
-		logger.info("=========check session==========");
-		
+    public void hasSession(HttpServletRequest request){
 		if (null == request.getSession().getAttribute("user")) {
-			
-			logger.info("=========no session=============");
-			logger.info("return modelandview: /index");
-			request.getRequestDispatcher(request.getContextPath()).forward(request, response);
-
-		} 
-
-		return ;
-		
-    }
-    
+			islogin = false;
+//			request.getRequestDispatcher(request.getContextPath() + forward).forward(request, response);
+		} else {
+			islogin = true;
+		}
+	}
+	
+	
 	@RequestMapping("/main")
     public ModelAndView main_page(HttpServletRequest request) {	
-    	    	    	    	
-    	UserModel user = (UserModel) request.getSession().getAttribute("user");
     	
-    	ModelAndView modelandview = new ModelAndView();
+		ModelAndView modelandview = new ModelAndView();
+		
+		if (!islogin) {
+			modelandview.setViewName("index");
+			logger.info("request /main, but no session, return modelandview: /index");
+			return modelandview;
+		}
+		
+    	UserModel user = (UserModel) request.getSession().getAttribute("user");
+    	    	
     	modelandview.addObject("user", user);
     	modelandview.setViewName("main");
     	
