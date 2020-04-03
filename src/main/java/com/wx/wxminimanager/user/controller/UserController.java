@@ -186,7 +186,52 @@ public class UserController {
 
     }
     
-    @ResponseBody
+	
+	@RequestMapping("/admin-list")
+    public ModelAndView adminlist_page(HttpServletRequest request) {
+    	
+        ModelAndView modelandview = new ModelAndView();
+		
+		if (!islogin) {
+			modelandview.setViewName("index");
+			logger.info("request /user/admin-list, but no session, return modelandview: /index");
+			return modelandview;
+		}
+		
+		UserModel user = (UserModel) request.getSession().getAttribute("user");
+    	logger.info("userid: {}, request /user/admin-list", user.getUserid());
+		
+		logger.info("userid: {}, return modelandview: /user/admin-list", user.getUserid());
+				
+		modelandview.setViewName("/user/admin-list");
+		
+		return modelandview;
+    }
+	
+	
+	@RequestMapping("/admin-rule")
+    public ModelAndView adminrule_page(HttpServletRequest request) {
+    	
+        ModelAndView modelandview = new ModelAndView();
+		
+		if (!islogin) {
+			modelandview.setViewName("index");
+			logger.info("request /user/admin-rule, but no session, return modelandview: /index");
+			return modelandview;
+		}
+		
+		UserModel user = (UserModel) request.getSession().getAttribute("user");
+    	logger.info("userid: {}, request /user/admin-rule", user.getUserid());
+		
+		logger.info("userid: {}, return modelandview: /user/admin-rule", user.getUserid());
+				
+		modelandview.setViewName("/user/admin-rule");
+		
+		return modelandview;
+    }
+	
+	
+	@ResponseBody
 	@RequestMapping("/111111login")
     public ModelAndView index() {
     	
