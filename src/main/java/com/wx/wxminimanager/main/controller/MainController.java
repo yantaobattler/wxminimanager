@@ -48,6 +48,7 @@ public class MainController {
     	
 		ModelAndView modelandview = new ModelAndView();
 		
+		
 		if (!islogin) {
 			modelandview.setViewName("index");
 			logger.info("request /main, but no session, return modelandview: /index");
