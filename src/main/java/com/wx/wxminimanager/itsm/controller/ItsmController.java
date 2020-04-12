@@ -103,8 +103,8 @@ public class ItsmController {
 	@RequestMapping(value="/select")
 	public String select(HttpServletRequest request) {
 				
-		UserModel user = (UserModel) request.getSession().getAttribute("user");
-    	logger.info("userid: {}, request /itsm/select", user.getUserid());
+//		UserModel user = (UserModel) request.getSession().getAttribute("user");
+//    	logger.info("userid: {}, request /itsm/select", user.getUserid());
     	
 		ItsmModel[] itsmlist = itsmservice.selectlist();
 		
@@ -116,7 +116,7 @@ public class ItsmController {
 		
 		String rsp_string = gson.toJson(rsp_map);
 		
-		logger.info("userid: {}, return {}", user.getUserid(), rsp_string);
+		logger.info("return {}", rsp_string);
 		
 		return rsp_string;
 		
