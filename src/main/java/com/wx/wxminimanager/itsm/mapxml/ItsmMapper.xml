@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.wx.wxminimanager.itsm.dao.ItsmMapper">
+
+	<resultMap id="BaseResultMap"
+		type="com.wx.wxminimanager.itsm.model.ItsmModel">
+		<id column="id" property="id" jdbcType="VARCHAR" />
+		<result column="topic" property="topic"
+			jdbcType="VARCHAR" />
+		<result column="text" property="text"
+			jdbcType="VARCHAR" />
+		<result column="date" property="date"
+			jdbcType="VARCHAR" />
+	</resultMap>
+
+
+	<sql id="Base_Column_List">
+		id, topic, text, date
+	</sql>
+
+	<select id="select" 
+		resultType="com.wx.wxminimanager.itsm.model.ItsmModel">
+		select
+		<include refid="Base_Column_List" />
+		from itsm
+	</select>
+	
+	<insert id="add"
+		parameterType="com.wx.wxminimanager.itsm.model.ItsmModel">
+		insert into itsm
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="topic != null">
+				topic,
+			</if>
+			<if test="text != null">
+				text,
+			</if>
+			<if test="date != null">
+				date,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="topic != null">
+				#{topic,jdbcType=VARCHAR},
+			</if>
+			<if test="text != null">
+				#{text,jdbcType=VARCHAR},
+			</if>
+			<if test="date != null">
+				#{date,jdbcType=VARCHAR},
+			</if>
+		</trim>
+	</insert>
+	
+	
+<!-- 	
+	<update id="updateLogintime" parameterType="string">
+		update user
+		<set>
+		    last_time = this_time,
+			<if test="this_time != null">
+				this_time = #{this_time,jdbcType=VARCHAR},
+			</if>
+		</set>
+		where username = #{username,jdbcType=VARCHAR}
+	</update>
+	
+	<update id="updateUser" parameterType="com.wx.wxminimanager.user.model.UserModel">
+		update user
+		<set>
+			<if test="username != null">
+				username = #{username,jdbcType=VARCHAR},
+			</if>
+			<if test="chinesename != null">
+				chinesename = #{chinesename,jdbcType=VARCHAR},
+			</if>
+			<if test="password != null">
+				password = #{password,jdbcType=VARCHAR},
+			</if>
+		</set>
+		where userid = #{userid,jdbcType=VARCHAR}
+	</update>
+
+ 
+	<select id="selectCountofTime" parameterType="string" resultType="int">
+		select
+		count(*)
+		from user
+		<where>
+			<if test="IP!=null">
+				ip = #{IP, jdbcType=VARCHAR}
+			</if>
+			<if test="start_time!=null">
+				and this_time &gt;= #{start_time, jdbcType=VARCHAR}
+			</if>
+			<if test="end_time!=null">
+				and this_time &lt;= #{end_time, jdbcType=VARCHAR}
+			</if>
+		</where>
+	</select>
+
+
+	<insert id="insertUser"
+		parameterType="com.trcbank.fwjg.model.UserModel">
+		insert into user
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="ip != null">
+				ip,
+			</if>
+			<if test="this_time != null">
+				this_time,
+			</if>
+			<if test="last_time != null">
+				last_time,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="ip != null">
+				#{ip,jdbcType=VARCHAR},
+			</if>
+			<if test="this_time != null">
+				#{this_time,jdbcType=VARCHAR},
+			</if>
+			<if test="last_time != null">
+				#{last_time,jdbcType=VARCHAR},
+			</if>
+		</trim>
+	</insert>
+
+
+	
+	
+	<select id="selectCount" parameterType="string" resultType="int">
+		select
+		count(*)
+		from user
+		<where>
+			<if test="IP!=null">
+				ip = #{IP, jdbcType=VARCHAR}
+			</if>
+		</where>
+	</select>
+	
+-->
+</mapper>

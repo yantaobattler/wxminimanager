@@ -129,7 +129,7 @@ public class UserController {
 		
 		logger.info("return modelandview: /index");
 				
-		modelandview.setViewName("/index");
+		modelandview.setViewName("index");
 		
 		return modelandview;
 		
@@ -152,7 +152,7 @@ public class UserController {
 		
 		logger.info("userid: {}, return modelandview: /user/chgpwd_page", user.getUserid());
 				
-		modelandview.setViewName("/user/chgpwd_page");
+		modelandview.setViewName("user/chgpwd_page");
 		
 		return modelandview;
     }
@@ -203,7 +203,7 @@ public class UserController {
 		
 		logger.info("userid: {}, return modelandview: /user/admin-list", user.getUserid());
 				
-		modelandview.setViewName("/user/admin-list");
+		modelandview.setViewName("user/admin-list");
 		
 		return modelandview;
     }
@@ -225,7 +225,7 @@ public class UserController {
 		
 		logger.info("userid: {}, return modelandview: /user/admin-rule", user.getUserid());
 				
-		modelandview.setViewName("/user/admin-rule");
+		modelandview.setViewName("user/admin-rule");
 		
 		return modelandview;
     }
