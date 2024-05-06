@@ -40,6 +40,8 @@
               //   });
               //监听提交
               form.on('submit(login)', function(data){
+            	  //console.log(data);
+ 
                 $.ajax({
                     type : "POST",
                     url : "/user/login",
